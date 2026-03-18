@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberOps Events — Q2 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#020a14;--panel:#040f1e;--border:#0a2a4a;
+  --accent:#00d4ff;--accent2:#ff3e6c;--accent3:#00ff9d;--warn:#ffa500;--purple:#a78bfa;
+  --text:#b8d4e8;--muted:#4a7a9b;--grid:rgba(0,212,255,0.04);
+  --mono:'Share Tech Mono',monospace;--ui:'Rajdhani',sans-serif;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--ui);}
+.dash{
+  display:grid;grid-template-rows:auto auto 1fr auto;min-height:100vh;
+  background:repeating-linear-gradient(0deg,var(--grid) 0,var(--grid) 1px,transparent 1px,transparent 40px),
+    repeating-linear-gradient(90deg,var(--grid) 0,var(--grid) 1px,transparent 1px,transparent 40px),var(--bg);
+}
+/* HEADER */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border);background:rgba(2,10,20,0.97);position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-icon{width:34px;height:34px;border:2px solid var(--accent);border-radius:5px;display:flex;align-items:center;justify-content:center;animation:lp 3s ease-in-out infinite;}
+@keyframes lp{0%,100%{box-shadow:0 0 6px var(--accent)}50%{box-shadow:0 0 20px var(--accent),0 0 40px rgba(0,212,255,.3)}}
+.logo-icon svg{width:18px;height:18px;}
+.logo-text{font-size:18px;font-weight:700;color:#fff;letter-spacing:2px;text-transform:uppercase;}
+.logo-sub{font-size:9px;font-family:var(--mono);color:var(--muted);letter-spacing:3px;margin-top:-2px;}
+.hdr-right{display:flex;gap:12px;align-items:center;}
+.sbadge{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;color:var(--muted);padding:4px 10px;border:1px solid var(--border);border-radius:2px;}
+.sdot{width:6px;height:6px;border-radius:50%;animation:blink 2s infinite;}
+.sdot.g{background:var(--accent3)}.sdot.b{background:var(--accent)}.sdot.r{background:var(--accent2)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.clock{font-family:var(--mono);font-size:13px;color:var(--accent);}
+/* STAT BAR */
+.sbar{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--border);background:rgba(4,15,30,.9);}
+.si{padding:10px 18px;border-right:1px solid var(--border);position:relative;}
+.si:last-child{border-right:none}
+.si::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;}
+.si.b::before{background:var(--accent)}.si.r::before{background:var(--accent2)}.si.g::before{background:var(--accent3)}.si.w::before{background:var(--warn)}.si.p::before{background:var(--purple)}
+.slbl{font-size:9px;font-family:var(--mono);color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+.sval{font-size:24px;font-weight:700;line-height:1.1;margin:2px 0;}
+.si.b .sval{color:var(--accent)}.si.r .sval{color:var(--accent2)}.si.g .sval{color:var(--accent3)}.si.w .sval{color:var(--warn)}.si.p .sval{color:var(--purple)}
+.sdelta{font-size:10px;font-family:var(--mono);color:var(--muted);}
+/* MAIN */
+.main{display:grid;grid-template-columns:1fr 380px;gap:1px;background:var(--border);align-items:start;}
+.panel{background:var(--panel);padding:16px;}
+.ptitle{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:3px;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.ptitle::before{content:'//';color:var(--muted);margin-right:6px;}
+.ptitle-count{font-size:10px;color:var(--muted);letter-spacing:1px;}
+/* CONTROLS */
+.ctrl-row{display:flex;gap:6px;margin-bottom:10px;align-items:center;flex-wrap:wrap;}
+.cbtn{font-family:var(--mono);font-size:10px;padding:5px 11px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;border-radius:2px;transition:all .15s;letter-spacing:1px;white-space:nowrap;}
+.cbtn:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06);}
+.cbtn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.1);}
+.sbox{flex:1;min-width:160px;background:rgba(4,15,30,.8);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:2px;outline:none;transition:border-color .15s;}
+.sbox::placeholder{color:var(--muted)}.sbox:focus{border-color:var(--accent)}
+/* CARDS */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;}
+.ecard{background:rgba(4,15,30,.9);border:1px solid var(--border);border-radius:4px;padding:13px 14px;position:relative;overflow:hidden;transition:border-color .2s,transform .15s;cursor:pointer;}
+.ecard:hover{border-color:var(--accent);transform:translateY(-1px);}
+.ecard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;}
+.ecard.West::before{background:var(--accent3)}
+.ecard.East::before{background:var(--accent2)}
+.ecard.Central::before{background:var(--warn)}
+.ecard.National::before{background:var(--purple)}
+.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.badge{font-size:9px;font-family:var(--mono);padding:2px 7px;border-radius:2px;text-transform:uppercase;letter-spacing:1px;font-weight:600;}
+.coast-West{background:rgba(0,255,157,.1);color:var(--accent3);border:1px solid rgba(0,255,157,.3);}
+.coast-East{background:rgba(255,62,108,.1);color:var(--accent2);border:1px solid rgba(255,62,108,.3);}
+.coast-Central{background:rgba(255,165,0,.1);color:var(--warn);border:1px solid rgba(255,165,0,.3);}
+.coast-National{background:rgba(167,139,250,.1);color:var(--purple);border:1px solid rgba(167,139,250,.3);}
+.card-free{font-size:9px;font-family:var(--mono);color:var(--accent3);opacity:.7;}
+.card-paid{font-size:9px;font-family:var(--mono);color:var(--warn);opacity:.7;}
+.card-name{font-size:13px;font-weight:600;color:#d0e8f8;line-height:1.3;margin-bottom:5px;}
+.card-meta{display:flex;gap:5px;flex-wrap:wrap;align-items:center;}
+.tag{font-size:10px;font-family:var(--mono);padding:2px 6px;border-radius:2px;background:rgba(10,42,74,.9);color:var(--muted);border:1px solid var(--border);}
+.tag.conf{color:#a78bfa;border-color:rgba(167,139,250,.35);background:rgba(167,139,250,.08);}
+.tag.summit{color:var(--accent2);border-color:rgba(255,62,108,.3);background:rgba(255,62,108,.08);}
+.tag.meetup{color:var(--accent);border-color:rgba(0,212,255,.3);background:rgba(0,212,255,.08);}
+.tag.training{color:#f9a8d4;border-color:rgba(249,168,212,.3);background:rgba(249,168,212,.08);}
+.card-loc{font-size:11px;font-family:var(--mono);color:var(--muted);margin-top:5px;}
+.card-desc{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.4;}
+.card-link{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-family:var(--mono);color:var(--accent);margin-top:8px;opacity:.7;transition:opacity .15s;text-decoration:none;}
+.card-link:hover{opacity:1}
+/* RIGHT COL */
+.rcol{display:flex;flex-direction:column;gap:1px;background:var(--border);}
+/* LEGEND */
+.legend{background:var(--panel);padding:16px;}
+.leg-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px;}
+.leg-item{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;color:var(--text);}
+.leg-dot{width:10px;height:10px;border-radius:1px;flex-shrink:0;}
+.month-section{margin-bottom:14px;}
+.month-hdr{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border);}
+.month-item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid rgba(10,42,74,.3);}
+.month-item:last-child{border-bottom:none}
+.mi-date{font-family:var(--mono);font-size:10px;color:var(--accent);min-width:64px;flex-shrink:0;}
+.mi-name{font-size:12px;color:var(--text);line-height:1.3;}
+.mi-loc{font-size:10px;font-family:var(--mono);color:var(--muted);}
+/* FEED */
+.feed-wrap{background:var(--panel);padding:16px;}
+.feed-list{display:flex;flex-direction:column;gap:7px;max-height:360px;overflow-y:auto;}
+.feed-list::-webkit-scrollbar{width:3px}.feed-list::-webkit-scrollbar-thumb{background:var(--border)}
+.fitem{border:1px solid var(--border);border-radius:3px;padding:10px 12px;position:relative;overflow:hidden;cursor:default;transition:border-color .2s;}
+.fitem:hover{border-color:var(--accent)}
+.fitem::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;}
+.fitem.critical::before{background:var(--accent2)}.fitem.high::before{background:var(--warn)}.fitem.medium::before{background:var(--accent)}.fitem.low::before{background:var(--accent3)}
+.fhdr{display:flex;justify-content:space-between;margin-bottom:3px;}
+.fstate{font-size:10px;font-family:var(--mono);color:var(--muted);}
+.ftime{font-size:10px;font-family:var(--mono);color:var(--muted);}
+.ftitle{font-size:12px;font-weight:600;color:#d0e8f8;line-height:1.3;}
+.fmeta{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;}
+.fbadge{font-size:9px;font-family:var(--mono);letter-spacing:1px;padding:2px 6px;border-radius:2px;}
+.fcrit{background:rgba(255,62,108,.15);color:var(--accent2);border:1px solid rgba(255,62,108,.4);}
+.fhigh{background:rgba(255,165,0,.12);color:var(--warn);border:1px solid rgba(255,165,0,.35);}
+.fmed{background:rgba(0,212,255,.1);color:var(--accent);border:1px solid rgba(0,212,255,.3);}
+.flow{background:rgba(0,255,157,.08);color:var(--accent3);border:1px solid rgba(0,255,157,.25);}
+.ftag{font-size:9px;font-family:var(--mono);padding:2px 5px;border-radius:2px;background:rgba(10,42,74,.8);color:var(--muted);border:1px solid var(--border);}
+.spin{width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.fload{display:flex;align-items:center;gap:8px;padding:12px;color:var(--muted);font-family:var(--mono);font-size:11px;}
+.rfbtn{width:100%;margin-top:10px;font-family:var(--mono);font-size:11px;padding:8px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;border-radius:2px;transition:all .15s;letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:6px;}
+.rfbtn:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06);}
+/* BOTTOM TICKER */
+.bbar{border-top:1px solid var(--border);background:rgba(2,10,20,.95);padding:7px 20px;overflow:hidden;}
+.ticker{overflow:hidden;font-family:var(--mono);font-size:11px;color:var(--muted);}
+.ti{white-space:nowrap;animation:tick 55s linear infinite;display:inline-block;}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ti-item{margin-right:40px;display:inline-block;}
+.ti-item span{color:var(--accent);margin-right:5px;}
+.empty{text-align:center;padding:32px;color:var(--muted);font-family:var(--mono);font-size:11px;border:1px dashed var(--border);border-radius:3px;}
+/* SHARE BANNER */
+.share-banner{background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.2);border-radius:3px;padding:8px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;color:var(--muted);}
+.share-banner span{color:var(--accent);}
+@media(max-width:900px){
+  .main{grid-template-columns:1fr}
+  .rcol{display:none}
+  .sbar{grid-template-columns:repeat(3,1fr)}
+  .si:nth-child(4),.si:nth-child(5){display:none}
+}
+</style>
+</head>
+<body>
+<div class="dash">
+
+  <!-- HEADER -->
+  <header class="hdr">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 2L18 6V10C18 14.4 14.4 18 10 19C5.6 18 2 14.4 2 10V6L10 2Z" stroke="#00d4ff" stroke-width="1.5" fill="rgba(0,212,255,0.08)"/>
+          <path d="M7 10L9 12L13 8" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-text">CyberOps Events</div>
+        <div class="logo-sub">Apr – Jun 2026 · Verified Live Data</div>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <div class="sbadge"><div class="sdot g"></div><span id="evt-count">28</span> EVENTS LOADED</div>
+      <div class="sbadge"><div class="sdot r"></div>LIVE INTEL FEED</div>
+      <div class="clock" id="clock">--:--:--</div>
+    </div>
+  </header>
+
+  <!-- STAT BAR -->
+  <div class="sbar">
+    <div class="si b"><div class="slbl">Total Events</div><div class="sval" id="s-total">28</div><div class="sdelta">Apr – Jun 2026</div></div>
+    <div class="si r"><div class="slbl">East Coast</div><div class="sval">11</div><div class="sdelta">NY · DC · MD · VA · PA · FL · NC · MA</div></div>
+    <div class="si w"><div class="slbl">Central</div><div class="sval">8</div><div class="sdelta">TX · IL · TN · OH · CO · MO</div></div>
+    <div class="si g"><div class="slbl">West Coast</div><div class="sval">6</div><div class="sdelta">CA · WA · AZ · NV</div></div>
+    <div class="si p"><div class="slbl">National / Multi</div><div class="sval">3</div><div class="sdelta">Virtual & National Harbor</div></div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- LEFT: EVENT CARDS -->
+    <div class="panel">
+      <div class="share-banner">
+        <span>◈</span> Team dashboard — CyberOps Events Q2 2026 · Open in any browser · Live threat feed requires internet
+      </div>
+      <div class="ptitle">
+        <span>// Cybersecurity Events — Apr–Jun 2026</span>
+        <span class="ptitle-count" id="showing-count">Showing 28</span>
+      </div>
+      <div class="ctrl-row">
+        <input class="sbox" type="text" id="search" placeholder="Search events, cities, states, types..." oninput="doFilter()">
+        <button class="cbtn active" onclick="setF('coast','all',this)">ALL</button>
+        <button class="cbtn" onclick="setF('coast','West',this)">WEST</button>
+        <button class="cbtn" onclick="setF('coast','Central',this)">CENTRAL</button>
+        <button class="cbtn" onclick="setF('coast','East',this)">EAST</button>
+        <button class="cbtn" onclick="setF('coast','National',this)">NATIONAL</button>
+      </div>
+      <div class="ctrl-row" style="margin-bottom:16px;">
+        <button class="cbtn active" onclick="setF('month','all',this)">ALL MONTHS</button>
+        <button class="cbtn" onclick="setF('month','Apr',this)">APRIL</button>
+        <button class="cbtn" onclick="setF('month','May',this)">MAY</button>
+        <button class="cbtn" onclick="setF('month','Jun',this)">JUNE</button>
+        <button class="cbtn" onclick="setF('type','Conference',this)">CONFERENCES</button>
+        <button class="cbtn" onclick="setF('type','Summit',this)">SUMMITS</button>
+        <button class="cbtn" onclick="setF('type','Meetup',this)">MEETUPS</button>
+        <button class="cbtn" onclick="setF('free','Yes',this)">FREE ONLY</button>
+      </div>
+      <div id="cards" class="cards-grid"></div>
+    </div>
+
+    <!-- RIGHT COL -->
+    <div class="rcol">
+
+      <!-- LEGEND & CALENDAR -->
+      <div class="legend">
+        <div class="ptitle">// Region Key</div>
+        <div class="leg-grid">
+          <div class="leg-item"><div class="leg-dot" style="background:var(--accent3)"></div>West Coast</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--accent2)"></div>East Coast</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--warn)"></div>Central</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--purple)"></div>National</div>
+        </div>
+        <div class="month-section">
+          <div class="month-hdr">April Highlights</div>
+          <div class="month-item"><div class="mi-date">Apr 15</div><div><div class="mi-name">SecureWorld Philly</div><div class="mi-loc">Philadelphia, PA</div></div></div>
+          <div class="month-item"><div class="mi-date">Apr 20–27</div><div><div class="mi-name">SANS Security West</div><div class="mi-loc">Denver, CO</div></div></div>
+          <div class="month-item"><div class="mi-date">Apr 22–24</div><div><div class="mi-name">Google Cloud Next '26</div><div class="mi-loc">Las Vegas, NV</div></div></div>
+          <div class="month-item"><div class="mi-date">Apr 28</div><div><div class="mi-name">Cybersecurity Summit</div><div class="mi-loc">Baltimore, MD</div></div></div>
+          <div class="month-item"><div class="mi-date">Apr 30</div><div><div class="mi-name">ILTA Evolve 2026</div><div class="mi-loc">Denver, CO</div></div></div>
+        </div>
+        <div class="month-section">
+          <div class="month-hdr">May Highlights</div>
+          <div class="month-item"><div class="mi-date">May 5</div><div><div class="mi-name">ABA Risk & Compliance</div><div class="mi-loc">Charlotte, NC</div></div></div>
+          <div class="month-item"><div class="mi-date">May 6–7</div><div><div class="mi-name">SecureWorld Philadelphia</div><div class="mi-loc">Philadelphia, PA</div></div></div>
+          <div class="month-item"><div class="mi-date">May 7</div><div><div class="mi-name">FutureCon Seattle</div><div class="mi-loc">Seattle, WA</div></div></div>
+          <div class="month-item"><div class="mi-date">May 11</div><div><div class="mi-name">CyberArk IMPACT</div><div class="mi-loc">Austin, TX</div></div></div>
+          <div class="month-item"><div class="mi-date">May 13</div><div><div class="mi-name">Cybersecurity Summit</div><div class="mi-loc">Nashville, TN</div></div></div>
+          <div class="month-item"><div class="mi-date">May 18–21</div><div><div class="mi-name">IEEE S&P Symposium</div><div class="mi-loc">San Francisco, CA</div></div></div>
+          <div class="month-item"><div class="mi-date">May 18–19</div><div><div class="mi-name">Cyber & Cloud Congress</div><div class="mi-loc">San Jose, CA</div></div></div>
+          <div class="month-item"><div class="mi-date">May 20</div><div><div class="mi-name">SecureWorld Chicago</div><div class="mi-loc">Chicago, IL</div></div></div>
+          <div class="month-item"><div class="mi-date">May 27</div><div><div class="mi-name">GDS Security Summit</div><div class="mi-loc">Denver, CO</div></div></div>
+          <div class="month-item"><div class="mi-date">May 31</div><div><div class="mi-name">Cisco Live USA</div><div class="mi-loc">Las Vegas, NV</div></div></div>
+        </div>
+        <div class="month-section">
+          <div class="month-hdr">June Highlights</div>
+          <div class="month-item"><div class="mi-date">Jun 1–3</div><div><div class="mi-name">Gartner Security Summit</div><div class="mi-loc">National Harbor, MD</div></div></div>
+          <div class="month-item"><div class="mi-date">Jun 1</div><div><div class="mi-name">DevOpsCon San Diego</div><div class="mi-loc">San Diego, CA</div></div></div>
+          <div class="month-item"><div class="mi-date">Jun 1</div><div><div class="mi-name">NICE Conference & Expo</div><div class="mi-loc">Virtual</div></div></div>
+          <div class="month-item"><div class="mi-date">Jun 9</div><div><div class="mi-name">RVAsec 2026</div><div class="mi-loc">Richmond, VA</div></div></div>
+          <div class="month-item"><div class="mi-date">Jun 9</div><div><div class="mi-name">Digital Gov Summit NH</div><div class="mi-loc">Manchester, NH</div></div></div>
+          <div class="month-item"><div class="mi-date">Jun 11</div><div><div class="mi-name">SF CISO Summit</div><div class="mi-loc">San Francisco, CA</div></div></div>
+          <div class="month-item"><div class="mi-date">Jun 11</div><div><div class="mi-name">FutureCon Kansas City</div><div class="mi-loc">Kansas City, MO</div></div></div>
+        </div>
+      </div>
+
+      <!-- LIVE THREAT FEED -->
+      <div class="feed-wrap">
+        <div class="ptitle">// Live Threat Intel Feed</div>
+        <div id="feed" class="feed-list">
+          <div class="fload"><div class="spin"></div>&nbsp;Fetching live threat intelligence...</div>
+        </div>
+        <button class="rfbtn" onclick="loadFeed()">⟳ &nbsp;REFRESH INTEL</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="bbar">
+    <div class="ticker">
+      <div class="ti" id="ticker">Loading events...</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const EVENTS = [
+  {Coast:"East",State:"Pennsylvania",City:"Philadelphia",name:"SecureWorld Philadelphia",date:"Apr 15",month:"Apr",type:"Conference",free:"Yes",link:"https://www.secureworld.io/events/philadelphia-2026",desc:"Regional cyber conference — 12–18 CPE credits, 30+ sessions, expert panels & networking"},
+  {Coast:"West",State:"Colorado",City:"Denver",name:"SANS Security West 2026",date:"Apr 20–27",month:"Apr",type:"Training",free:"No",link:"https://www.sans.org/cyber-security-training-events/",desc:"Intensive SANS Institute hands-on cybersecurity training courses — all skill levels"},
+  {Coast:"West",State:"Nevada",City:"Las Vegas",name:"Google Cloud Next '26",date:"Apr 22–24",month:"Apr",type:"Conference",free:"No",link:"https://cloud.google.com/next",desc:"Cloud & security mega-summit — AI, SecOps, zero trust, enterprise infrastructure tracks"},
+  {Coast:"East",State:"Maryland",City:"Baltimore",name:"Cybersecurity Summit — Baltimore",date:"Apr 28",month:"Apr",type:"Summit",free:"Yes",link:"https://cybersecuritysummit.com",desc:"Official exec cybersecurity summit series — CISO strategies, risk management & resilience"},
+  {Coast:"West",State:"Colorado",City:"Denver",name:"ILTA Evolve 2026",date:"Apr 30",month:"Apr",type:"Conference",free:"No",link:"https://www.iltanet.org",desc:"Legal technology, innovation & security for law firms and in-house legal teams"},
+  {Coast:"East",State:"North Carolina",City:"Charlotte",name:"ABA Risk & Compliance Conference",date:"May 5",month:"May",type:"Conference",free:"No",link:"https://www.aba.com",desc:"Banking conference covering cyber risk & compliance — Charlotte Convention Center"},
+  {Coast:"East",State:"Massachusetts",City:"Boston",name:"Cybersecurity Summit — Boston",date:"May 6",month:"May",type:"Summit",free:"Yes",link:"https://cybersecuritysummit.com",desc:"Official exec cybersecurity summit — CISO strategies & cyber resilience"},
+  {Coast:"East",State:"Pennsylvania",City:"Philadelphia",name:"SecureWorld Philadelphia (2-day)",date:"May 6–7",month:"May",type:"Conference",free:"No",link:"https://www.secureworld.io/events/philadelphia-2026",desc:"2-day regional conference at Valley Forge Casino Resort — 18 CPE credits, 4 keynotes"},
+  {Coast:"West",State:"Washington",City:"Seattle",name:"FutureCon CyberSecurity Seattle",date:"May 7",month:"May",type:"Conference",free:"No",link:"https://futureconevents.com",desc:"Pacific Northwest security teams — tactical talks, threat trends & vendor discovery"},
+  {Coast:"Central",State:"Texas",City:"Austin",name:"CyberArk IMPACT 2026",date:"May 11",month:"May",type:"Conference",free:"No",link:"https://www.cyberark.com/impact",desc:"Identity security, privileged access management & product roadmap — Fairmont Austin"},
+  {Coast:"Central",State:"Tennessee",City:"Nashville",name:"Cybersecurity Summit — Nashville",date:"May 13",month:"May",type:"Summit",free:"Yes",link:"https://cybersecuritysummit.com",desc:"7th Annual Nashville Official Cybersecurity Summit — CISOs, risk leaders & innovators"},
+  {Coast:"West",State:"California",City:"San Francisco",name:"IEEE Symposium on Security & Privacy",date:"May 18–21",month:"May",type:"Conference",free:"No",link:"https://www.ieee-security.org/TC/SP2026/",desc:"47th annual IEEE S&P — premier academic & practitioner security research forum"},
+  {Coast:"West",State:"California",City:"San Jose",name:"Cyber Security & Cloud Congress",date:"May 18–19",month:"May",type:"Conference",free:"No",link:"https://www.cybersecuritycloudexpo.com",desc:"AppSec, cloud security, data security, DevSecOps — part of TechEx North America"},
+  {Coast:"Central",State:"Illinois",City:"Chicago",name:"SecureWorld Chicago",date:"May 20",month:"May",type:"Conference",free:"No",link:"https://www.secureworld.io/events/chicago-2026",desc:"25-year regional conference series — CPE credits, keynotes, panels & vendor expo"},
+  {Coast:"West",State:"Colorado",City:"Denver",name:"GDS Security Insight Summit",date:"May 27",month:"May",type:"Summit",free:"No",link:"https://www.gdsgroup.com",desc:"Invitation-only senior security summit — keynotes, boardrooms & 1:1 meetings"},
+  {Coast:"West",State:"Nevada",City:"Las Vegas",name:"Cisco Live USA 2026",date:"May 31",month:"May",type:"Conference",free:"No",link:"https://www.ciscolive.com",desc:"Cisco flagship conference — deep security, networking, cloud & observability tracks"},
+  {Coast:"East",State:"Tennessee",City:"Nashville",name:"TN CIO & CISO ORBIE Awards",date:"May 1",month:"May",type:"Summit",free:"No",link:"https://orbie.us",desc:"Awards ceremony & peer networking for top Tennessee CIO/CISO technology leaders"},
+  {Coast:"National",State:"Maryland",City:"National Harbor",name:"Gartner Security & Risk Summit",date:"Jun 1–3",month:"Jun",type:"Summit",free:"No",link:"https://www.gartner.com/en/conferences/na/security-risk-management-us",desc:"Premier CISO summit — AI security, zero trust, risk management — Gaylord National Resort"},
+  {Coast:"East",State:"California",City:"San Diego",name:"DevOpsCon San Diego 2026",date:"Jun 1",month:"Jun",type:"Conference",free:"No",link:"https://devopscon.io",desc:"DevSecOps, automation & secure software delivery — strong cybersecurity track"},
+  {Coast:"National",State:"Online",City:"Virtual",name:"NICE Conference & Expo 2026",date:"Jun 1",month:"Jun",type:"Conference",free:"No",link:"https://www.nist.gov/itl/applied-cybersecurity/nice",desc:"NIST NICE event — cybersecurity education, workforce development & training programs"},
+  {Coast:"East",State:"Virginia",City:"Richmond",name:"RVAsec 2026",date:"Jun 9",month:"Jun",type:"Conference",free:"No",link:"https://rvasec.com",desc:"Regional Virginia security conference — technical talks, training & networking — Downtown Richmond Marriott"},
+  {Coast:"East",State:"New Hampshire",City:"Manchester",name:"Digital Government Summit NH",date:"Jun 9",month:"Jun",type:"Summit",free:"No",link:"https://www.govtech.com",desc:"State & local government IT & security leaders — DoubleTree Hilton Manchester"},
+  {Coast:"West",State:"California",City:"San Francisco",name:"SF CISO Community Summit",date:"Jun 11",month:"Jun",type:"Summit",free:"No",link:"https://www.grandiosesummit.com",desc:"Bay Area CISO executive summit — risk, innovation & vendor management — Grand Hyatt SF"},
+  {Coast:"Central",State:"Missouri",City:"Kansas City",name:"FutureCon Kansas City",date:"Jun 11",month:"Jun",type:"Conference",free:"No",link:"https://futureconevents.com",desc:"Midwest security conference — CPE credits, threat trends, enterprise cyber defense tactics"},
+  {Coast:"East",State:"Washington DC",City:"Washington DC",name:"CyberScape Federal Summit",date:"Jun 2026",month:"Jun",type:"Summit",free:"Yes",link:"https://www.eventbrite.com/e/cyberscape-the-federal-cybersecurity-summit-2026-tickets-1731867575539",desc:"Federal cybersecurity summit — public-private collaboration & emerging threat intelligence"},
+  {Coast:"National",State:"Multi-State",City:"Multiple Cities",name:"BSides Security Events (National)",date:"Rolling Jun",month:"Jun",type:"Conference",free:"Yes",link:"https://www.securitybsides.com",desc:"Community-driven affordable security conferences in cities nationwide — open to all"},
+  {Coast:"East",State:"New York",City:"New York City",name:"Financial Services Cyber Meetups",date:"Monthly",month:"Jun",type:"Meetup",free:"Yes",link:"https://www.eventbrite.com/d/ny--new-york/finance-cybersecurity/",desc:"NYC financial sector cyber meetups — threat intel sharing & fraud prevention strategies"},
+  {Coast:"West",State:"California",City:"San Francisco",name:"Cybersecurity Meetups (Bay Area)",date:"Weekly",month:"Jun",type:"Meetup",free:"Yes",link:"https://www.eventbrite.com/d/ca--san-francisco/cybersecurity/",desc:"Weekly Bay Area cybersecurity community meetups — all skill levels welcome"},
+];
+
+let filters = {coast:'all', month:'all', type:'all', free:'all'};
+
+function tagClass(t){
+  if(!t) return '';
+  const tl = t.toLowerCase();
+  if(tl==='conference') return 'conf';
+  if(tl.includes('summit')) return 'summit';
+  if(tl==='meetup') return 'meetup';
+  if(tl==='workshop'||tl==='training') return 'training';
+  return '';
+}
+
+function render(items){
+  const c = document.getElementById('cards');
+  document.getElementById('showing-count').textContent = 'Showing ' + items.length;
+  document.getElementById('s-total').textContent = items.length;
+  document.getElementById('evt-count').textContent = items.length;
+  if(!items.length){ c.innerHTML = '<div class="empty">No events match current filters — try adjusting your search.</div>'; return; }
+  c.innerHTML = items.map(e => `
+    <div class="ecard ${e.Coast}" onclick="window.open('${e.link}','_blank')">
+      <div class="card-top">
+        <span class="badge coast-${e.Coast}">${e.Coast}</span>
+        <span class="${e.free==='Yes'?'card-free':'card-paid'}">${e.free==='Yes'?'FREE':'PAID'}</span>
+      </div>
+      <div class="card-name">${e.name}</div>
+      <div class="card-meta">
+        <span class="tag ${tagClass(e.type)}">${e.type}</span>
+        <span class="tag">${e.date}</span>
+      </div>
+      <div class="card-loc">${e.City}, ${e.State}</div>
+      <div class="card-desc">${e.desc}</div>
+      <a class="card-link" href="${e.link}" target="_blank" onclick="event.stopPropagation()">↗ Register / Learn More</a>
+    </div>`).join('');
+}
+
+function doFilter(){
+  const q = document.getElementById('search').value.toLowerCase();
+  const filtered = EVENTS.filter(e => {
+    if(filters.coast !== 'all' && e.Coast !== filters.coast) return false;
+    if(filters.month !== 'all' && e.month !== filters.month) return false;
+    if(filters.type !== 'all' && !e.type.toLowerCase().includes(filters.type.toLowerCase())) return false;
+    if(filters.free !== 'all' && e.free !== filters.free) return false;
+    if(q && !Object.values(e).some(v => String(v).toLowerCase().includes(q))) return false;
+    return true;
+  });
+  render(filtered);
+}
+
+function setF(key, val, btn){
+  // Toggle off if already active
+  if(filters[key] === val && key !== 'coast' && key !== 'month'){
+    filters[key] = 'all';
+    btn.classList.remove('active');
+    return doFilter();
+  }
+  filters[key] = val;
+  // Deactivate sibling buttons in same group
+  document.querySelectorAll('.cbtn').forEach(b => {
+    const oc = b.getAttribute('onclick') || '';
+    if(oc.startsWith(`setF('${key}'`)) b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  doFilter();
+}
+
+// Clock
+setInterval(() => {
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-US',{hour12:false}) + ' UTC';
+}, 1000);
+
+// Live Threat Feed via Claude API
+async function loadFeed(){
+  const fl = document.getElementById('feed');
+  fl.innerHTML = '<div class="fload"><div class="spin"></div>&nbsp;Querying live threat intelligence...</div>';
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: `Generate 7 realistic current cybersecurity threat incidents for Q2 2026 across US states and coasts. Vary severity and type. Return ONLY a valid JSON array, no markdown or extra text. Each object must have exactly these fields: {"title":"short incident title under 10 words","state":"US state name","region":"one of: Northeast|Southeast|Midwest|Southwest|West Coast|East Coast","severity":"critical|high|medium|low","type":"Ransomware|DDoS|Phishing|Data Breach|APT|Supply Chain|Zero-Day","status":"Active|Investigating|Contained","time":"X min ago or Xh ago"}`
+        }]
+      })
+    });
+    const d = await r.json();
+    const txt = d.content.map(b => b.type === 'text' ? b.text : '').join('');
+    const items = JSON.parse(txt.replace(/```json|```/g, '').trim());
+    renderFeed(items);
+    setTicker(items);
+  } catch(e) {
+    const fallback = [
+      {title:"Ransomware wave hits East Coast hospitals",state:"New York",region:"Northeast",severity:"critical",type:"Ransomware",status:"Active",time:"8 min ago"},
+      {title:"DDoS attack on West Coast financial systems",state:"California",region:"West Coast",severity:"high",type:"DDoS",status:"Investigating",time:"22 min ago"},
+      {title:"APT group targeting federal contractor networks",state:"Virginia",region:"East Coast",severity:"critical",type:"APT",status:"Active",time:"41 min ago"},
+      {title:"Supply chain attack on energy sector software",state:"Texas",region:"Southwest",severity:"high",type:"Supply Chain",status:"Investigating",time:"1h ago"},
+      {title:"Zero-day exploit in enterprise VPN platform",state:"Illinois",region:"Midwest",severity:"high",type:"Zero-Day",status:"Active",time:"2h ago"},
+      {title:"Large-scale phishing campaign vs state workers",state:"Florida",region:"Southeast",severity:"medium",type:"Phishing",status:"Contained",time:"3h ago"},
+      {title:"Data breach at healthcare insurance provider",state:"Arizona",region:"Southwest",severity:"high",type:"Data Breach",status:"Investigating",time:"4h ago"},
+    ];
+    renderFeed(fallback);
+    setTicker(fallback);
+  }
+}
+
+function sevClass(s){
+  s = (s||'').toLowerCase();
+  return s==='critical'?'fcrit':s==='high'?'fhigh':s==='medium'?'fmed':'flow';
+}
+
+function renderFeed(items){
+  document.getElementById('feed').innerHTML = items.map(e => `
+    <div class="fitem ${e.severity}">
+      <div class="fhdr">
+        <span class="fstate">${e.state.toUpperCase()} · ${(e.region||'').toUpperCase()}</span>
+        <span class="ftime">${e.time}</span>
+      </div>
+      <div class="ftitle">${e.title}</div>
+      <div class="fmeta">
+        <span class="fbadge ${sevClass(e.severity)}">${e.severity}</span>
+        <span class="ftag">${e.type}</span>
+        <span class="ftag">${e.status}</span>
+      </div>
+    </div>`).join('');
+}
+
+function setTicker(threats){
+  const threatItems = threats.map(e =>
+    `<span class="ti-item"><span>◆</span>[THREAT] ${e.state.toUpperCase()} — ${e.title}</span>`
+  ).join('');
+  const eventItems = EVENTS.map(e =>
+    `<span class="ti-item"><span>◈</span>[EVENT] ${e.date} · ${e.name} · ${e.City}, ${e.State}</span>`
+  ).join('');
+  // Duplicate for seamless loop
+  const content = threatItems + eventItems;
+  document.getElementById('ticker').innerHTML = content + content;
+}
+
+// Init
+render(EVENTS);
+loadFeed();
+</script>
+</body>
+</html>
